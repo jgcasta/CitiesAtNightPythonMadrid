@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="es">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>CitiesAtNight - PythonMadrid 2016</title>
+
+		<meta name="description" content="Presentacion para las IX Jornadas de SIG Libre">
+		<meta name="author" content="Jose Gomez Castaño">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/sigte2015.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h3>Georreferenciación colaborativa de imágenes nocturnas tomadas desde la ISS, para estudios de consumo energético y contaminación lumínica</h3>
+					<p>Sánchez de Miguel, Alejandro; Gómez Castaño, José; Zamorano, Jaime; Lombraña, Daniel</p>
+						<small>Departamento de Astrofísica y CC. De la Atmósfera – Universidad Complutense de Madrid <a href="http://guaix.fis.ucm.es/" target="_blank">GUAIX</a> </small>
+					<img src='img/logoucm.png'>&nbsp;&nbsp;&nbsp;<img src='img/logocrowdcrafting.png'>
+					<img src='http://www.python-madrid.es/static/web/imgs/logo.png' ></p>
+
+					<aside class="notes">
+						Presentación GUAIX y Crowdcrafting
+					</aside>
+
+				</section>
+
+				<section>
+					<h2>Indice</h2>
+					<div>
+						<ul>
+						<li>Introducción</li>
+						<li>Contaminación Lumínica</li>
+						<li>Procesamiento de Imágenes</li>
+						<li>Aplicaciones desarrolladas</li>
+						<li>	Web CitiesAtNight</li>
+						<li>	DarkSkies</li>
+						<li>	LostAtNight</li>
+						<li>	NightCitiesISS</li>
+						<li>Fuentes de datos</li>
+						<li>Crowdcrafting</li>
+						<li>Resultados de participación</li>
+						<li>Imágenes resultantes</li>
+					</ul>
+					</div>
+					<aside class="notes">
+						Indice rápido
+					</aside>
+
+				</section>	
+
+				<section data-background="img/ventana.png">
+					<h2>Objetivos</h2>
+					<blockquote >Hacer de las imágenes una fuente de datos cuantitativos para estudios de Contaminación Lumínica</blockquote>
+					
+					<p class="fragment">Recabar colaboración para el trabajo científico</p>
+					<p class="fragment">Identificar y clasificar imágenes</p>
+					<p class="fragment">Localizarlas y georreferenciarlas</p>
+
+					<aside class="notes">
+						El objetivo del trabajo, 3 puntos
+					</aside>
+
+
+				</section>
+
+
+				<section>
+					<h2>Introducción - ¿Desde dónde?</h2>
+					<p><img src='img/isstrayectory.png'></p>
+
+					<aside class="notes">
+						<ul>
+						<li>Altitud entre los 350 y 400km</li>
+						<li>Más de 15 revoluciones por día</li>
+						<li>La posición de la ISS a partir de los elementos orbitales TLE</li>
+						</ul>
+					</aside>
+
+
+				</section>
+
+				<section data-background="img/fondoPersonas.png">
+					<h1 style="color:yellow">Objetivos de participación</h1>
+					<h3 class="fragment" style="color:yellow">Colaboración</h3>
+					<h3 class="fragment" style="color:yellow">Potenciar conocimiento abierto</h3>
+					<h3 class="fragment" style="color:yellow">Potenciar código fuente abierto</h3>
+					<h3 class="fragment" style="color:yellow">Uso de datos abiertos</h3>
+
+					<aside class="notes">
+						<ul>
+						<li>Colaboración</li>
+						<li>Potenciar conocimiento abierto</li>
+						<li>Potenciar código fuente abierto</li>
+						<li>Uso de datos abiertos</li>
+						</ul>
+					</aside>
+				</section>
+
+				<section data-background="img/contaminacion.png">
+					<h1 style="color:black">¿Contaminación?</h1>
+				</section>
+
+				<section data-background="img/contaminacionLuninica.png">
+					<h1 style="color:white">¿Contaminación?</h1>
+				</section>
+
+				<section data-background="img/fondoviirs.png">
+					<blockquote style="color:yellow">En términos científicos, por contaminación lumínica se entiende la alteración de la oscuridad natural del medio nocturno producida por la emisión de luz artificial. </blockquote>
+					<aside class="notes">
+						<ul>
+						<li>Definición</li>
+						</ul>
+					</aside>
+				</section>
+
+				<section data-background="img/contaminacionLuninica.png">
+					<img src='img/consumo.png'>
+					<pre>Sánchez de Miguel, A., Zamorano, J., Gómez Castaño, J., & Pascual, S. (2014). Evolution of the energy consumed by street lighting in Spain estimated with DMSP-OLS data. Journal of Quantitative Spectroscopy and Radiative Transfer, 139, 109-117.</pre>
+
+					<aside class="notes">
+						Evolución del consumo energético usando datos de satélite DMSP desde 1992 calibrados en 1998 y 2012, y VIIRS calibrados en 2014
+					</aside>
+				</section>
+
+				<section >
+					<h2>Procesamiento de imágenes</h2>
+					<img src='img/histogramas.png'>
+
+					<aside class="notes">
+						Procesamiento inicial automático usando la descomposición del histograma, para obtener una primera clasificación
+					</aside>
+				</section>
+
+				<section >
+					<h2>Acceso a datos</h2>
+					<img src='img/gateway.png'>
+					
+					<aside class="notes">
+						Descarga de las imágenes y los metadados desde el sitio FTP del JSC mediante un proceso automático diario
+					</aside>
+
+				</section>
+
+
+				<section >
+					<h2>Metadatos de imágenes</h2>
+					<pre>NASA PHOTO ID:                  iss039e009160.NEF
+GMT:                            2014:04:02 21:06:27
+MODEL:                          NIKON D3S S/N: 2007931
+NASA SN and Temp:               NASA#2007931
+Firmware:                       Ver.1.00
+Image Size:                     4288x2844
+Compression:                    Nikon NEF Compressed
+Exposure Program:               Manual
+Shutter:                        1/8
+Aperture:                       2.8
+Meter Mode:                     Multi-segment
+Shooting Mode:                  Single-Frame
+ISO Speed:                      25600
+AF Area Mode:                   Single Area
+Focal Length:                   31.0 mm
+Lens ID:                        AF-S Zoom-Nikkor 28-70mm f/2.8D IF-ED
+DOF:                            14.11 m (4.38 - 18.49)
+Focus Mode:                     Manual
+Focus Distance:                 7.08 m
+Subject Distance Range:         Unknown
+Compensation:                   0
+Noise Reduction:                Off
+Whitebalance:                   Auto
+Flash:                          No Flash
+Flash Mode:                     Did Not Fire
+Flash Commander Mode:           Off
+Flash Compensation:     0
+Flash Control Mode:             Off
+Flash Group A Control Mode:     Off
+Flash Group B Control Mode:     Off
+Self Timer Time:                5 s</pre>
+
+
+					<aside class="notes">
+						<ul>
+						<li>Metadatos de cada imagen descargado mediante scrapping del sitio web del JSC</li>
+						<li>No todos los datos se encuentran siempre</li>
+						</ul>
+					</aside>
+
+				</section>
+
+				<section >
+					<h3>Sitio web CitiesAtNight</h3>
+					<a href="http://www.citiesatnight.org" target="_blank"><img src='img/citiesatnight.png'></a>
+					
+				</section>
+
+				<section >
+					<h3>CitiesAtNight acceso directo a imágenes</h3>
+					<img src='img/tresmapas.png'>
+					
+				</section>
+
+				<section >
+					<h3>Aplicación DarkSkies</h3>
+					<p ><a href="http://crowdcrafting.org/app/darkskies" target="_blank"><img src='img/dark.png'></a>
+
+				</section>
+				<section >
+					<h3>Aplicación LostAtNight</h3>
+					<p ><a href="http://crowdcrafting.org/app/LostAtNight/" target="_blank"><img src='img/lost.png'></a>
+
+				</section>
+				<section >
+					<h3>Aplicación NightCitiesISS</h3>
+					<p ><a href="http://crowdcrafting.org/app/nightcitiesiss/" target="_blank"><img src='img/nightcitiesiss.png'></a>
+
+				</section>
+
+				<section >
+					<h3>Acceso a aplicaciones y Código fuente</h3>
+					<h3>DarkSkies</h3>
+					<p><a href="http://crowdcrafting.org/app/darkskies" target="_blank">http://crowdcrafting.org/app/darkskies</a>
+						<a href="https://github.com/pmisson/darkskiesISS" target="_blank">https://github.com/pmisson/darkskiesISS</a></p>
+					<h3>LostAtNight</h3>
+					<p><a href="http://crowdcrafting.org/app/LostAtNight/" target="_blank">http://crowdcrafting.org/app/LostAtNight/</a>
+						<a href="https://github.com/jgcasta/lostatnight" target="_blank">https://github.com/jgcasta/lostatnight</a></p>
+					<h3>NitghtCitiesISS</h3>
+					<p><a href="http://crowdcrafting.org/app/nightcitiesiss/" target="_blank">http://crowdcrafting.org/app/nightcitiesiss/</a>
+						<a href="https://github.com/jgcasta/nightcitiesiss" target="_blank">https://github.com/jgcasta/nightcitiesiss</a></p>
+					
+				</section>
+
+
+				<section >
+					<h3>Fuentes de datos</h3>
+					<img src='img/fuentes.png'>
+					
+					<aside class="notes">
+						<ul>
+						<li>Fuentes abiertas</li>
+						<li></li>
+						</ul>
+					</aside>
+				</section>
+
+				<section >
+					<h3>La Ciencia es demasiado importante como para dejarla en manos de los Científicos</h3>
+					<img src='img/crowdcrafting.png' width="200" heigth="200">&nbsp;&nbsp;&nbsp;<img src='img/logosolfabric.png'  width="210" heigth="210">
+					<aside class="notes">
+						Necesitamos una plataforma robusta que soporte la conexión de cientos de usuarios Crowdcrafting y equipo de Solfabric
+					</aside>
+				</section>
+
+				<section >
+					<h3>HTML5
+						Python
+						QGIS gvSIG
+						PostGIS
+						</h3>
+					<img src='img/pybossa.png' width="200%">
+					<aside class="notes">
+						Herramientas utilizadas y framework PyBossa
+					</aside>
+				</section>
+
+				<section data-background="img/openscience.jpg" class="height: 50%">
+					<h2 style="color:yellow">
+						Open Source
+						Open Science</h2>
+					<img src='img/openscience.jpg'>
+					<h2 style="color:red">Permitir la difusión y verificación de resultados</h2>
+				</section>
+
+
+				<section >
+					<h3>Difusión</h3>
+					<img src='img/redessociales.png'>
+
+					<aside class="notes">
+						La difusión ha sido importante a través de redes sociales, TV, prensa, medios electrónicos, apoyo de NASA, ESA,...
+					</aside>
+				</section>
+
+				<section >
+					<img src='img/kickstarter.png'>
+					<img src='img/kickstarter2.png'>
+					<aside class="notes">
+						Participación en el Hackhathon organizado por Kickstarter en NY en pasado 28 de febrero, seleccionados entre los 16 mejores proyectos mundiales
+					</aside>
+				</section>
+				
+				<section >
+					<h3>Participación</h3>
+					<img src='img/participacion.png'>
+				</section>				
+
+				<section>
+					<h2>Participación por aplicaciones</h2>
+					<table>
+						<thead>
+							<tr>
+								<th>Aplicación</th>
+								<th>Tareas</th>
+								<th>Voluntarios</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>AppDarkSkies</td>
+								<td>112563</td>
+								<td>17070</td>
+							<tr>
+							<tr>
+								<td>LostAtNight</td>
+								<td>6881</td>
+								<td>7639</td>
+							<tr>
+							<tr>
+								<td>NightCitiesISS</td>
+								<td>2112</td>
+								<td>4835</td>
+							<tr>
+						</tbody>
+					</table>
+
+					<aside class="notes">
+						Tareas realizadas por los voluntarios
+					</aside>
+				</section>
+
+
+				<section >
+					<h2>Resultados Descarga JSON</h2>
+										<pre style="width:1100px"><code data-trim contenteditable>
+{
+  "info": {
+    "linkData": "http://eol.jsc.nasa.gov/scripts/sseop/photo.pl?mission=ISS037&roll=E&frame=17703",
+    "link_big": "http://eol.jsc.nasa.gov/sseop/images/ESC/large/ISS037/ISS037-E-17703.JPG",
+    "link_small": "http://eol.jsc.nasa.gov/sseop/images/ESC/small/ISS037/ISS037-E-17703.JPG",
+    "citylat": "38.1156879",
+    "focal": "400.0",
+    "coordimage": "http://eol.jsc.nasa.gov/scripts/SSEOP/MapCoordinate/MapCoordinate.pl?lat=38.8&lon=10.1",
+    "idiss": "17703",
+    "citylon": "13.3612671"
+  },
+  "n_answers": 20,
+  "quorum": 0,
+  "calibration": 0,
+  "created": "2014-07-16T21:59:04.755231",
+  "app_id": 1712,
+  "state": "completed",
+  "id": 606386,
+  "priority_0": 0.921420060044208
+
+					</code></pre>
+					<aside class="notes">
+						Para la descarga de los resultados y que sean verificables se ha usado el formato JSON con todos los datos
+					</aside>
+				</section>
+
+
+				<section >
+					<h3>Resultados Visualización de imágenes</h3>
+					<a href="http://darkskyiss.org/" target="_blank"><img src='img/visualimagenes.png'></a>
+
+					<aside class="notes">
+						Otro medio de comprobación de resultados es la visualización directa de las imágenes. Enlace externo
+					</aside>
+				</section>	
+
+
+
+				<section data-background="img/postales.png">
+					<aside class="notes">
+						Existen más de 200 imágenes completamente georreferenciadas
+					</aside>
+				</section>
+
+
+
+				<section >
+					<h3>Resultados - Cáculo de Isofotas</h3>
+					<img src='img/isophotas.png'>
+					<aside class="notes">
+						Resultados adicionales, Modelos Digitales de Elevación a partir de la intensidad de energía radiada
+					</aside>
+				</section>
+
+				<section >
+					<h3>Resultados - Identificación de puntos de emisión</h3>
+					<img src='img/elevaciones.png'>
+				</section>
+
+
+				<section >
+					<h3>Resultados - Identificación de puntos de emisión</h3>
+					<img src='img/ortofotos.png'>
+					<aside class="notes">
+						Superposición de ortofotografía para identificar las fuentes luminosas
+					</aside>
+				</section>
+
+				<section data-background="img/fondoPersonas.png">
+					<h2 style="color:yellow">Agradecimientos</h2>
+					<h3 class="fragment" style="color:yellow">Voluntarios....muchos voluntarios</h3>
+					<h3 class="fragment" style="color:yellow">NASA, ESA, MediaLabPrado, CSA-ASC Canada</h3>
+					<h3 class="fragment" style="color:yellow">TV, prensa, redes sociales</h3>		
+			
+				</section>
+
+				<section>
+					<h2 style="color:yellow">Esperamos vuestra participación</h2>
+					<a href="http://www.citiesatnight.org/index_ES.html" target="_blank" width="350" height="350"><img src='img/qr.png'></a>&nbsp;&nbsp;&nbsp;<img src='img/ahorro.jpg' width="350" height="350">
+			
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
