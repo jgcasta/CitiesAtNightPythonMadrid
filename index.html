@@ -14,6 +14,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
 		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/zenburn.css">
 		<link rel="stylesheet" href="css/theme/sigte2015.css" id="theme">
 
 		<!-- Code syntax highlighting -->
@@ -124,7 +125,9 @@
 				<section style="top: 0; left: 400px" data-background="img/fondoviirs.jpg" >
 
 						<div >
+
 							<h3 style=" color: black;">¿Desde dónde?</h3>
+
 						</div>
 
 					<aside class="notes">
@@ -154,6 +157,7 @@
 					<h2>VIIRS</h2>
 					
 					</div>
+
 
 					<aside class="notes">
 						<ul>
@@ -201,6 +205,47 @@
 				<section>
 					<h2>ISS - Descarga de elementos TLE desde el NORAD</h2>
 
+					<pre><code class="python">
+#!/usr/bin/env python
+# -*- coding: utf-8
+
+'''
+	Compute NPP satellite transit time over Madrid unsing TLE orbital elements
+
+	@author Jose Gomez Castaño
+	@version 1.0.0
+
+	@precondition username and password to login into www.space-track.org website is needed
+'''
+
+import urllib, urllib2, cookielib
+import datetime
+
+noradId = '25544'
+fecha = '2016/06/15'
+
+baseURL = 'https://www.space-track.org'
+username = 'usuario'
+password = 'pass'
+
+d = datetime.datetime.strptime(fecha, "%Y/%m/%d")
+d1 = d + datetime.timedelta(days=1)
+dstr = d.strftime("%Y-%m-%d")
+d1str = d1.strftime("%Y-%m-%d")
+
+print "Connecting..."
+cj = cookielib.CookieJar()
+opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+parameters = urllib.urlencode({'identity': username ,'password': password})
+opener.open(baseURL + '/ajaxauth/login', parameters)
+queryString = baseURL +"/basicspacedata/query/class/tle/format/tle/NORAD_CAT_ID/"+noradId+"/EPOCH/"+dstr+"%2000:00:00--"+d1str+"%2000:00:00"
+resp = opener.open(queryString)
+
+TLE = resp.read()
+print "---------------------------------TLE---------------------------------\n" + TLE
+
+opener.close()
+</code></pre>
 
 					<aside class="notes">
 						<ul>
